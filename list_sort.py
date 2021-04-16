@@ -1,6 +1,6 @@
 # docstringの型　入力によって変わる場合どうやってかく？ 今は(free)にしてある
 
-
+#kadai4
 
 class Node():
     """ノードクラス
