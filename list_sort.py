@@ -1,11 +1,4 @@
-#PEP8 チェック項目　
-#空行の開け方
-#コメント # ではじまる（スペースがいる）
-#命名規則
-
-#github
-
-#docstringの型　入力によって変わる場合どうやってかく？ 今は(free)にしてある
+# docstringの型　入力によって変わる場合どうやってかく？ 今は(free)にしてある
 
 
 
@@ -54,11 +47,11 @@ class DoublyLinkedList():
             7 3
         """
         new_node = Node(x, None, None)
-        #それまでにnodeが一個もない場合(初めての追加)
+        # それまでにnodeが一個もない場合(初めての追加)
         if self.head_node is None:
             self.head_node = new_node
             self.tail_node = new_node
-        #すでにnodeがある場合
+        # すでにnodeがある場合
         else:
             new_node.next = self.head_node
             self.head_node.prev = new_node
@@ -106,18 +99,18 @@ class DoublyLinkedList():
         if self.head_node.data == x:
             self.l_deleteFirst()
         else:
-            #データ数が1個でない場合のみ次を調べる
+            # データ数が1個でない場合のみ次を調べる
             if self.head_node != self.tail_node:
                 checking = self.head_node.next
                 while True:
-                    #最後のノードの場合
+                    # 最後のノードの場合
                     if checking == self.tail_node:
                         if checking.data == x:
                             self.l_deleteLast()
                             break
                         else:
                             break
-                    #中間ノードの場合
+                    # 中間ノードの場合
                     else:
                         if checking.data == x:
                             prev_checking = checking.prev
@@ -142,11 +135,11 @@ class DoublyLinkedList():
             >>> dll.l_show()
             7 3
         """
-        #要素が一つの場合
+        # 要素が一つの場合
         if self.head_node == self.tail_node:
             self.head_node = None
             self.tail_node = None
-        #要素が複数の場合
+        # 要素が複数の場合
         else:
             new_head = self.head_node.next
             new_head.prev = None
@@ -166,11 +159,11 @@ class DoublyLinkedList():
             >>> dll.l_show()
             9 7
         """
-        #要素が一つの場合
+        # 要素が一つの場合
         if self.head_node == self.tail_node:
             self.head_node = None
             self.tail_node = None
-        #要素が複数の場合
+        # 要素が複数の場合
         else:
             new_tail = self.tail_node.prev
             new_tail.next = None
@@ -194,7 +187,7 @@ class DoublyLinkedList():
         else:
             printing = self.head_node
             print(printing.data, end=' ')
-            #ノードが1つでない場合
+            # ノードが1つでない場合
             if self.head_node != self.tail_node:
                 printing = self.head_node.next
                 while(1):
@@ -225,7 +218,7 @@ class DoublyLinkedList():
             printing = self.head_node
             print(printing.data[0] + str(printing.data[1]), end=' ')
 
-            #ノードが1つでない場合
+            # ノードが1つでない場合
             if self.head_node != self.tail_node:
                 printing = self.head_node.next
                 while(1):
@@ -248,7 +241,7 @@ class DoublyLinkedList():
         node0 = node1.prev
         node3 = node2.next
 
-        #node2がtailの場合
+        # node2がtailの場合
         if node3 is None:
             node0.next = node2
             node2.prev = node0
@@ -257,7 +250,7 @@ class DoublyLinkedList():
             node2.next = node1
             self.tail_node = node1
                         
-        #node1がheadの場合
+        # node1がheadの場合
         elif node0 is None:
             node2.prev = node0
             node1.prev = node2
@@ -288,7 +281,7 @@ class DoublyLinkedList():
         node3 = node4.prev
         node5 = node4.next
 
-        #node1が先頭ノード
+        # node1が先頭ノード
         if node0 is None:
             node4.prev = node0
             node1.prev = node3
@@ -343,7 +336,7 @@ class DoublyLinkedList():
             
             insert_point = v.prev
             tmp = insert_point
-            #挿入箇所を調べる
+            # 挿入箇所を調べる
             while True:
                 if (insert_point is None) or (insert_point.data <= v.data):
                     insert_point = tmp
@@ -355,13 +348,13 @@ class DoublyLinkedList():
 
             next_v = v.next
 
-            #先頭もしくは末尾の場合
+            # 先頭もしくは末尾の場合
             if insert_flag == 1:
                 node0 = insert_point.prev
                 node1 = v.prev
                 node2 = v.next
 
-                #挿入して先頭に来る場合
+                # 挿入して先頭に来る場合
                 if insert_point == self.head_node:
                     v.prev = node0
                     insert_point.prev = v
@@ -370,7 +363,7 @@ class DoublyLinkedList():
                     node2.prev = node1               
                     self.head_node = v
 
-                #末尾のノードを動かす場合
+                # 末尾のノードを動かす場合
                 elif node2 is None:
                     node0.next = v
                     v.prev = node0
@@ -409,11 +402,11 @@ class DoublyLinkedList():
         flag = 1
         while (flag == 1):
             flag = 0
-            #node1 -> node2の順
+            # node1 -> node2の順
             node2 = self.tail_node
             node1 = node2.prev
             while True:
-                #nodeが1個もしくはnode2が先頭の場合
+                # nodeが1個もしくはnode2が先頭の場合
                 if node1 is None:
                     break
 
@@ -448,12 +441,12 @@ class DoublyLinkedList():
         flag = 1
         while (flag == 1):
             flag = 0
-            #node1 -> node2の順
+            # node1 -> node2の順
             node2 = self.tail_node
             node1 = node2.prev
                    
             while True:
-                #nodeが1個もしくはnode2が先頭の場合
+                # nodeが1個もしくはnode2が先頭の場合
                 if node1 is None:
                     break
                 
@@ -494,14 +487,14 @@ class DoublyLinkedList():
                     break
                 j = j.next
             
-            #入れ替えが必要ない場合
+            # 入れ替えが必要ない場合
             if target == minj:
                 tmp = target.next
-            #隣り合うものを入れ替える場合
+            # 隣り合うものを入れ替える場合
             elif target.next == minj:
                 tmp = target
                 self.swap_linked_nodes(target, minj)
-            #隣り合わないものを入れ替え   
+            # 隣り合わないものを入れ替え   
             else:
                 tmp = target.next
                 self.swap_nonlinked_nodes(target, minj)
@@ -539,14 +532,14 @@ class DoublyLinkedList():
                     break
                 j = j.next
 
-            #入れ替えが必要ない場合
+            # 入れ替えが必要ない場合
             if target == minj:
                 tmp = target.next
-            #隣り合うものを入れ替える場合
+            # 隣り合うものを入れ替える場合
             elif target.next == minj:
                 tmp = target
                 self.swap_linked_nodes(target, minj)
-            #隣り合わないものを入れ替える場合
+            # 隣り合わないものを入れ替える場合
             else:
                 tmp = target.next
                 self.swap_nonlinked_nodes(target, minj)
@@ -577,7 +570,7 @@ class DoublyLinkedList():
             Not stable
         """
         print('stable sort')
-        #オリジナルを複製
+        # オリジナルを複製
         original = DoublyLinkedList()
         p = self.tail_node
         while(1):
@@ -586,7 +579,7 @@ class DoublyLinkedList():
                 break
             p = p.prev
 
-        #bubble_sort
+        # bubble_sort
         self.bubble_sort_trump()
         self.l_show_trump()        
         if self.checkIsStable_DLL(original):
@@ -594,7 +587,7 @@ class DoublyLinkedList():
         else:
             print('Not stable')
 
-        #selection_sort
+        # selection_sort
         self = original
         self.selection_sort_trump()
         self.l_show_trump()
@@ -692,7 +685,7 @@ class List():
             tmp = self.mlist[i]
             j = i - 1
             while (j >= 0) and (self.mlist[j] > tmp):
-                #一つ後ろにずらす
+                # 一つ後ろにずらす
                 self.mlist[j + 1] = self.mlist[j]
                 j -= 1
             self.mlist[j + 1] = tmp
@@ -770,11 +763,11 @@ class List():
         counter = 0
         for i in range(0, n):
             minj = i
-            #最小を探す
+            # 最小を探す
             for j in range(i, n):
                 if self.mlist[j] < self.mlist[minj]:
                     minj = j
-            #入れ替え
+            # 入れ替え
             if minj != i:
                 counter += 1
                 tmp = self.mlist[minj]
@@ -798,11 +791,11 @@ class List():
         n = len(self.mlist)
         for i in range(0, n):
             minj = i
-            #最小を探す
+            # 最小を探す
             for j in range(i, n):
                 if self.mlist[j][1] < self.mlist[minj][1]:
                     minj = j
-            #入れ替え
+            # 入れ替え
             tmp = self.mlist[minj]
             self.mlist[minj] = self.mlist[i]
             self.mlist[i] = tmp
@@ -825,12 +818,12 @@ class List():
             Not stable
         """
         print('stable sort')
-        #元のリストを複製
+        # 元のリストを複製
         original = []
         for i in range(len(self.mlist)):
             original.append(self.mlist[i])
         
-        #bubble_sort
+        # bubble_sort
         self.bubble_sort_trump()
         self.l_show_trump()
         if self.checkIsStable(original, self.mlist):
@@ -838,13 +831,13 @@ class List():
         else:
             print('Not stable')
 
-        #元のリストを複製
+        # 元のリストを複製
         self.mlist = original
         original = []
         for i in range(len(self.mlist)):
             original.append(self.mlist[i])
 
-        #selection_sort
+        # selection_sort
         self.selection_sort_trump()
         self.l_show_trump()
         if self.checkIsStable(original, self.mlist):
@@ -870,7 +863,7 @@ class List():
             for j in range(i + 1, n):
                 for a in range(n):
                     for b in range(a + 1, n):
-                        #同じ数字があり、ソートの前後で順序が変わる場合
+                        # 同じ数字があり、ソートの前後で順序が変わる場合
                         if (original[i][1] == original[j][1] and 
                             original[i] == sorted[b] and original[j] == sorted[a]):
                             isStable = False
