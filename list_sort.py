@@ -368,12 +368,22 @@ class DoublyLinkedList():
 
                 # 挿入して先頭に来る場合
                 if insert_point == self.head_node:
-                    v.prev = node0
-                    insert_point.prev = v
-                    v.next = insert_point
-                    node1.next = node2
-                    node2.prev = node1               
-                    self.head_node = v
+                    #末尾ノードが先頭に来る場合
+                    if node2 is None:
+                        v.prev = node0
+                        insert_point.prev = v
+                        v.next = insert_point
+                        node1.next = node2             
+                        self.head_node = v
+                        self.tail_node = node1
+
+                    else:
+                        v.prev = node0
+                        insert_point.prev = v
+                        v.next = insert_point
+                        node1.next = node2
+                        node2.prev = node1               
+                        self.head_node = v
 
                 # 末尾のノードを動かす場合
                 elif node2 is None:
