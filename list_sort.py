@@ -283,14 +283,26 @@ class DoublyLinkedList():
 
         # node1が先頭ノード
         if node0 is None:
-            node4.prev = node0
-            node1.prev = node3
-            node1.next = node5
-            node5.prev = node1
-            node4.next = node2
-            node3.next = node1
-            node2.prev = node4
-            self.head_node = node4                          
+            #先頭と末尾を入れ替える場合
+            if node5 is None:
+                node4.prev = node0
+                node1.prev = node3
+                node1.next = node5
+                node4.next = node2
+                node3.next = node1
+                node2.prev = node4
+                self.head_node = node4  
+                self.tail_node = node1
+
+            else:
+                node4.prev = node0
+                node1.prev = node3
+                node1.next = node5
+                node5.prev = node1
+                node4.next = node2
+                node3.next = node1
+                node2.prev = node4
+                self.head_node = node4                            
 
         elif node5 is None:
             node0.next = node4
