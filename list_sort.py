@@ -1,14 +1,10 @@
-# docstringの型　入力によって変わる場合どうやってかく？ 今は(free)にしてある
-
-
-
 class Node():
     """ノードクラス
 
     双方向連結リストクラスDoublyLinkedList()のノードオブジェクトとして利用する
 
     Attributes:
-        data(free) : ノードのデータ
+        data(int) : ノードのデータ
         prev(obj) : 対象ノードの前ノード
         next(obj) : 対象ノードの次ノード
     """
@@ -31,19 +27,19 @@ class DoublyLinkedList():
         self.head_node = None
         self.tail_node = None
 
-    def l_insert(self, x):
+    def insert(self, x):
         """挿入メソッド
 
          連結リストの先頭にキーxを持つ要素を継ぎ足す
 
         Args:
-            x(free): 挿入するデータ
+            x(int): 挿入するデータ
 
         Examples:
             >>> dll = DoublyLinkedList()
-            >>> dll.l_insert(3)
-            >>> dll.l_insert(7)
-            >>> dll.l_show()
+            >>> dll.insert(3)
+            >>> dll.insert(7)
+            >>> dll.show()
             7 3
         """
         new_node = Node(x, None, None)
@@ -57,47 +53,44 @@ class DoublyLinkedList():
             self.head_node.prev = new_node
             self.head_node = new_node
 
-    def card_to_list(self, card):
-        """トランプリスト型変換メソッド
+    def insert_list_as_dll(self, lst):
+        """挿入メソッド
 
-        "D7"などのトランプカードを表す文字列を第一要素がマーク(を表す文字)、第二要素がカードの数字
-        であるリスト型に変換する
+         リストの要素を同じ順番になるように双方向連結リストの先頭に追加する
 
         Args:
-            card(str): 1文字目がトランプマーク、2文字目以降がトランプの数字を表す文字列
-                       (例: クラブの10 -> 'C10')
+            lst(list): 挿入するデータのリスト
 
         Examples:
             >>> dll = DoublyLinkedList()
-            >>> lst = dll.card_to_list('D12')
-            >>> print(lst)
-            ['D', 12]
+            >>> dll.insert_list_as_dll([1,2,3,4,5])
+            >>> dll.show()
+            1 2 3 4 5
         """
-        lst = []
-        lst.append(card[0])
-        lst.append(int(card[1:]))
-        return lst
+        n = len(lst)
+        for i in range(n):
+            self.insert(lst[n-i-1])
 
-    def l_delete(self, x):
+    def delete(self, x):
         """指定要素の削除メソッド
 
         キーxを持つ最初の要素を連結リストから削除する。
         そのような要素が存在しない場合は何もしない。
 
         Args:
-            x(free): 削除するデータ
+            x(int): 削除するデータ
 
         Examples:
             >>> dll = DoublyLinkedList()
-            >>> dll.l_insert(3)
-            >>> dll.l_insert(7)
-            >>> dll.l_insert(9)
-            >>> dll.l_delete(7)
-            >>> dll.l_show()
+            >>> dll.insert(3)
+            >>> dll.insert(7)
+            >>> dll.insert(9)
+            >>> dll.delete(7)
+            >>> dll.show()
             9 3
         """
         if self.head_node.data == x:
-            self.l_deleteFirst()
+            self.deleteFirst()
         else:
             # データ数が1個でない場合のみ次を調べる
             if self.head_node != self.tail_node:
@@ -106,7 +99,7 @@ class DoublyLinkedList():
                     # 最後のノードの場合
                     if checking == self.tail_node:
                         if checking.data == x:
-                            self.l_deleteLast()
+                            self.deleteLast()
                             break
                         else:
                             break
@@ -121,18 +114,18 @@ class DoublyLinkedList():
                         else:
                             checking = checking.next
 
-    def l_deleteFirst(self):
+    def deleteFirst(self):
         """先頭要素の削除メソッド
 
         リストの先頭の要素を削除する。
 
         Examples:
             >>> dll = DoublyLinkedList()
-            >>> dll.l_insert(3)
-            >>> dll.l_insert(7)
-            >>> dll.l_insert(9)
-            >>> dll.l_deleteFirst()
-            >>> dll.l_show()
+            >>> dll.insert(3)
+            >>> dll.insert(7)
+            >>> dll.insert(9)
+            >>> dll.deleteFirst()
+            >>> dll.show()
             7 3
         """
         # 要素が一つの場合
@@ -145,18 +138,18 @@ class DoublyLinkedList():
             new_head.prev = None
             self.head_node = new_head
 
-    def l_deleteLast(self):
+    def deleteLast(self):
         """末尾要素の削除メソッド
 
         リストの末尾の要素を削除する。
 
         Examples:
             >>> dll = DoublyLinkedList()
-            >>> dll.l_insert(3)
-            >>> dll.l_insert(7)
-            >>> dll.l_insert(9)
-            >>> dll.l_deleteLast()
-            >>> dll.l_show()
+            >>> dll.insert(3)
+            >>> dll.insert(7)
+            >>> dll.insert(9)
+            >>> dll.deleteLast()
+            >>> dll.show()
             9 7
         """
         # 要素が一つの場合
@@ -169,17 +162,17 @@ class DoublyLinkedList():
             new_tail.next = None
             self.tail_node = new_tail
 
-    def l_show(self):
+    def show(self):
         """表示用メソッド
 
         リストの全データをスペースを開けて表示する
 
         Examples:
             >>> dll = DoublyLinkedList()
-            >>> dll.l_insert(3)
-            >>> dll.l_insert(7)
-            >>> dll.l_insert(9)
-            >>> dll.l_show()
+            >>> dll.insert(3)
+            >>> dll.insert(7)
+            >>> dll.insert(9)
+            >>> dll.show()
             9 7 3
         """
         if self.head_node is None:
@@ -198,37 +191,6 @@ class DoublyLinkedList():
                         print(printing.data, end=' ')
                         printing = printing.next
         
-    def l_show_trump(self):
-        """トランプ表示用メソッド
-
-        リストの1番目の要素が文字、2番目の要素が数字である(例: ['D', 3])データが格納された
-        双方向連結リストの全データについて、1番目と2番目の要素をつなげて(例: D3)スペースを開けて表示する。
-
-        Examples:
-            >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(['C', 3])
-            >>> ins.l_insert(['D', 2])
-            >>> ins.l_insert(['S', 4])
-            >>> ins.l_show_trump()
-            S4 D2 C3
-        """
-        if self.head_node is None:
-            pass
-        else:
-            printing = self.head_node
-            print(printing.data[0] + str(printing.data[1]), end=' ')
-
-            # ノードが1つでない場合
-            if self.head_node != self.tail_node:
-                printing = self.head_node.next
-                while(1):
-                    if printing == self.tail_node:
-                        print(printing.data[0] + str(printing.data[1]))
-                        break
-                    else:
-                        print(printing.data[0] + str(printing.data[1]), end=' ')
-                        printing = printing.next
-
     def swap_linked_nodes(self, node1, node2):
         """連結ノードの入れ替えメソッド
 
@@ -331,10 +293,7 @@ class DoublyLinkedList():
 
         Examples:
             >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(6)
-            >>> ins.l_insert(2)
-            >>> ins.l_insert(1)
-            >>> ins.l_insert(7)
+            >>> ins.insert_list_as_dll([2, 1, 7, 6])
             >>> ins.insertion_sort()
             insertion sort
             1 2 6 7
@@ -347,15 +306,15 @@ class DoublyLinkedList():
                 break
             
             insert_point = v.prev
-            tmp = insert_point
+            next_ins_point = insert_point
             # 挿入箇所を調べる
             while True:
                 if (insert_point is None) or (insert_point.data <= v.data):
-                    insert_point = tmp
+                    insert_point = next_ins_point
                     break
                 else:
                     insert_flag = 1
-                    tmp = insert_point
+                    next_ins_point = insert_point
                     insert_point = insert_point.prev
 
             next_v = v.next
@@ -365,7 +324,7 @@ class DoublyLinkedList():
                 node0 = insert_point.prev
                 node1 = v.prev
                 node2 = v.next
-
+                
                 # 挿入して先頭に来る場合
                 if insert_point == self.head_node:
                     #末尾ノードが先頭に来る場合
@@ -403,7 +362,7 @@ class DoublyLinkedList():
                     node2.prev = node1
 
             v = next_v
-        self.l_show()
+        self.show()
         
     def bubble_sort(self):
         """バブルソート
@@ -412,10 +371,7 @@ class DoublyLinkedList():
 
         Examples:
             >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(6)
-            >>> ins.l_insert(2)
-            >>> ins.l_insert(1)
-            >>> ins.l_insert(7)
+            >>> ins.insert_list_as_dll([2, 1, 7, 6])
             >>> ins.bubble_sort()
             bubble sort
             1 2 6 7
@@ -441,7 +397,114 @@ class DoublyLinkedList():
                 else:
                     node2 = node1
                     node1 = node1.prev
-        self.l_show()
+        self.show()
+
+    def selection_sort(self):
+        """選択ソート
+
+        リストの要素を選択ソートにより昇順に並び替える
+
+        Examples:
+            >>> ins = DoublyLinkedList()
+            >>> ins.insert_list_as_dll([2, 1, 7, 6])
+            >>> ins.selection_sort()
+            selection sort
+            1 2 6 7
+        """
+        print('selection sort')
+        target = self.head_node
+        while True:
+            minj = target
+            j = target
+            while True:
+                if j.data < minj.data:
+                    minj = j
+                if j == self.tail_node:
+                    break
+                j = j.next
+            
+            # 入れ替えが必要ない場合
+            if target == minj:
+                next_target = target.next
+            # 隣り合うものを入れ替える場合
+            elif target.next == minj:
+                next_target = target
+                self.swap_linked_nodes(target, minj)
+            # 隣り合わないものを入れ替え   
+            else:
+                next_target = target.next
+                self.swap_nonlinked_nodes(target, minj)
+            target = next_target
+            
+            if target == self.tail_node:
+                break
+        self.show()
+
+
+class DoublyLinkedList_for_card(DoublyLinkedList):
+    """双方向連結リストクラス(トランプ用)
+
+    トランプ用の双方向連結リストクラス(1番目の要素が文字、2番目の要素が数字(例: ['D', 3])のリストとしてデータを格納する)
+    データの挿入削除及び2種類のソート(バブルソート、選択ソート)、ソートの安定性を調べる
+    メソッドを持つ
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.head_node = None
+        self.tail_node = None
+
+    def show_trump(self):
+        """トランプ表示用メソッド
+
+        リストの1番目の要素が文字、2番目の要素が数字である(例: ['D', 3])データが格納された
+        双方向連結リストの全データについて、1番目と2番目の要素をつなげて(例: D3)スペースを開けて表示する。
+
+        Examples:
+            >>> ins = DoublyLinkedList_for_card()
+            >>> ins.insert(['C', 3])
+            >>> ins.insert(['D', 2])
+            >>> ins.insert(['S', 4])
+            >>> ins.show_trump()
+            S4 D2 C3
+        """
+        if self.head_node is None:
+            pass
+        else:
+            printing = self.head_node
+            print(printing.data[0] + str(printing.data[1]), end=' ')
+
+            # ノードが1つでない場合
+            if self.head_node != self.tail_node:
+                printing = self.head_node.next
+                while(1):
+                    if printing == self.tail_node:
+                        print(printing.data[0] + str(printing.data[1]))
+                        break
+                    else:
+                        print(printing.data[0] + str(printing.data[1]), end=' ')
+                        printing = printing.next
+
+    def card_to_list(self, card):
+        """トランプリスト型変換メソッド
+
+        "D7"などのトランプカードを表す文字列を第一要素がマーク(を表す文字)、第二要素がカードの数字
+        であるリスト型に変換する
+
+        Args:
+            card(str): 1文字目がトランプマーク、2文字目以降がトランプの数字を表す文字列
+                       (例: クラブの10 -> 'C10')
+
+        Examples:
+            >>> dll = DoublyLinkedList_for_card()
+            >>> lst = dll.card_to_list('D12')
+            >>> print(lst)
+            ['D', 12]
+        """
+        lst = []
+        lst.append(card[0])
+        lst.append(int(card[1:]))
+        return lst
 
     def bubble_sort_trump(self):
         """バブルソート(トランプ用)
@@ -450,14 +513,14 @@ class DoublyLinkedList():
         双方向連結リストの全データについて、バブルソートで数字が昇順になるように並び替える
 
         Examples:
-            >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(ins.card_to_list('C3'))
-            >>> ins.l_insert(ins.card_to_list('D2'))
-            >>> ins.l_insert(ins.card_to_list('S4'))
-            >>> ins.l_insert(ins.card_to_list('C9'))
-            >>> ins.l_insert(ins.card_to_list('H4'))
+            >>> ins = DoublyLinkedList_for_card()
+            >>> ins.insert(ins.card_to_list('C3'))
+            >>> ins.insert(ins.card_to_list('D2'))
+            >>> ins.insert(ins.card_to_list('S4'))
+            >>> ins.insert(ins.card_to_list('C9'))
+            >>> ins.insert(ins.card_to_list('H4'))
             >>> ins.bubble_sort_trump()
-            >>> ins.l_show_trump()
+            >>> ins.show_trump()
             D2 C3 H4 S4 C9
         """
         flag = 1
@@ -481,50 +544,6 @@ class DoublyLinkedList():
                 else:
                     node2 = node1
                     node1 = node1.prev
-        
-    def selection_sort(self):
-        """選択ソート
-
-        リストの要素を選択ソートにより昇順に並び替える
-
-        Examples:
-            >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(6)
-            >>> ins.l_insert(2)
-            >>> ins.l_insert(1)
-            >>> ins.l_insert(7)
-            >>> ins.selection_sort()
-            selection sort
-            1 2 6 7
-        """
-        print('selection sort')
-        target = self.head_node
-        while True:
-            minj = target
-            j = target
-            while True:
-                if j.data < minj.data:
-                    minj = j
-                if j == self.tail_node:
-                    break
-                j = j.next
-            
-            # 入れ替えが必要ない場合
-            if target == minj:
-                tmp = target.next
-            # 隣り合うものを入れ替える場合
-            elif target.next == minj:
-                tmp = target
-                self.swap_linked_nodes(target, minj)
-            # 隣り合わないものを入れ替え   
-            else:
-                tmp = target.next
-                self.swap_nonlinked_nodes(target, minj)
-            target = tmp
-            
-            if target == self.tail_node:
-                break
-        self.l_show()
 
     def selection_sort_trump(self):
         """選択ソート(トランプ用)
@@ -533,14 +552,14 @@ class DoublyLinkedList():
         双方向連結リストの全データについて、選択ソートで数字が昇順になるように並び替える
 
         Examples:
-            >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(ins.card_to_list('C3'))
-            >>> ins.l_insert(ins.card_to_list('D2'))
-            >>> ins.l_insert(ins.card_to_list('S4'))
-            >>> ins.l_insert(ins.card_to_list('C9'))
-            >>> ins.l_insert(ins.card_to_list('H4'))
+            >>> ins = DoublyLinkedList_for_card()
+            >>> ins.insert(ins.card_to_list('C3'))
+            >>> ins.insert(ins.card_to_list('D2'))
+            >>> ins.insert(ins.card_to_list('S4'))
+            >>> ins.insert(ins.card_to_list('C9'))
+            >>> ins.insert(ins.card_to_list('H4'))
             >>> ins.selection_sort_trump()
-            >>> ins.l_show_trump()
+            >>> ins.show_trump()
             D2 C3 S4 H4 C9
         """
         target = self.head_node
@@ -556,19 +575,19 @@ class DoublyLinkedList():
 
             # 入れ替えが必要ない場合
             if target == minj:
-                tmp = target.next
+                next_target = target.next
             # 隣り合うものを入れ替える場合
             elif target.next == minj:
-                tmp = target
+                next_target = target
                 self.swap_linked_nodes(target, minj)
             # 隣り合わないものを入れ替える場合
             else:
-                tmp = target.next
+                next_target = target.next
                 self.swap_nonlinked_nodes(target, minj)
-            target = tmp
+            target = next_target
             if target == self.tail_node:
                 break
-            
+          
     def stable_sort(self):
         """安定ソート(トランプ用)
 
@@ -578,12 +597,12 @@ class DoublyLinkedList():
         次に、選択ソートによって整列されたカードを順番に出力し、その出力が安定であるかどうかを出力する。
 
         Examples:
-            >>> ins = DoublyLinkedList()
-            >>> ins.l_insert(ins.card_to_list('C3'))
-            >>> ins.l_insert(ins.card_to_list('D2'))
-            >>> ins.l_insert(ins.card_to_list('S4'))
-            >>> ins.l_insert(ins.card_to_list('C9'))
-            >>> ins.l_insert(ins.card_to_list('H4'))
+            >>> ins = DoublyLinkedList_for_card()
+            >>> ins.insert(ins.card_to_list('C3'))
+            >>> ins.insert(ins.card_to_list('D2'))
+            >>> ins.insert(ins.card_to_list('S4'))
+            >>> ins.insert(ins.card_to_list('C9'))
+            >>> ins.insert(ins.card_to_list('H4'))
             >>> ins.stable_sort()
             stable sort
             D2 C3 H4 S4 C9
@@ -593,17 +612,17 @@ class DoublyLinkedList():
         """
         print('stable sort')
         # オリジナルを複製
-        original = DoublyLinkedList()
+        original = DoublyLinkedList_for_card()
         p = self.tail_node
         while(1):
-            original.l_insert(p.data)
+            original.insert(p.data)
             if p == self.head_node:
                 break
             p = p.prev
 
         # bubble_sort
         self.bubble_sort_trump()
-        self.l_show_trump()        
+        self.show_trump()        
         if self.checkIsStable_DLL(original):
             print('Stable')
         else:
@@ -612,7 +631,7 @@ class DoublyLinkedList():
         # selection_sort
         self = original
         self.selection_sort_trump()
-        self.l_show_trump()
+        self.show_trump()
         if self.checkIsStable_DLL(original):
             print('Stable')
         else:
@@ -630,58 +649,58 @@ class DoublyLinkedList():
             Boolean: Trueなら安定であり、Falseなら非安定
         """
         isStable = True
-        i = original.head_node
-        j = i.next
-        a = self.head_node
-        b = a.next
+        orig_n = original.head_node
+        orig_m = orig_n.next
+        sort_a = self.head_node
+        sort_b = sort_a.next
 
         while True:
             while True:
                 while True:
                     while True:
-
-                        if i.data[1] == j.data[1] and i.data == b.data and j.data == a.data:
+                        # 同じ数字があり、ソートの前後で順序が変わる場合
+                        if orig_n.data[1] == orig_m.data[1] and orig_n.data == sort_b.data and orig_m.data == sort_a.data:
                             isStable = False
 
-                        if b == self.tail_node:
+                        if sort_b == self.tail_node:
                             break
-                        b = b.next
-                    if a == self.tail_node:
+                        sort_b = sort_b.next
+                    if sort_a == self.tail_node:
                         break
-                    a = a.next
-                if j == original.tail_node:
+                    sort_a = sort_a.next
+                if orig_m == original.tail_node:
                     break
-                j = j.next
-            if i == original.tail_node:
+                orig_m = orig_m.next
+            if orig_n == original.tail_node:
                 break
-            i = i.next
+            orig_n = orig_n.next
         return isStable
 
 
 class List():
     """配列クラス
-
-　　3種類のソート(バブルソート、選択ソート、挿入ソート)及びソートの安定性を調べる
+    
+    3種類のソート(バブルソート、選択ソート、挿入ソート)
     メソッドを持つ
     """
 
-    def __init__(self, mlist):
-        self.mlist = mlist
+    def __init__(self, list):
+        self.list = list
     
-    def l_show(self):
+    def show(self):
         """表示用メソッド
 
         リストの全データをスペースを開けて表示する
 
         Examples:
             >>> lst = List([5,1,4])
-            >>> lst.l_show()
+            >>> lst.show()
             5 1 4
         """
-        n = len(self.mlist)
+        n = len(self.list)
         for i in range(n-1):
-            print(self.mlist[i], end=' ')
-        print(self.mlist[n-1])
+            print(self.list[i], end=' ')
+        print(self.list[n-1])
 
     def insertion_sort(self):
         """挿入ソート
@@ -701,17 +720,17 @@ class List():
             1 2 3 4 5 6
         """
         print('insertion sort')
-        n = len(self.mlist)
-        self.l_show()
+        n = len(self.list)
+        self.show()
         for i in range(1, n):
-            tmp = self.mlist[i]
+            target = self.list[i]
             j = i - 1
-            while (j >= 0) and (self.mlist[j] > tmp):
+            while (j >= 0) and (self.list[j] > target):
                 # 一つ後ろにずらす
-                self.mlist[j + 1] = self.mlist[j]
+                self.list[j + 1] = self.list[j]
                 j -= 1
-            self.mlist[j + 1] = tmp
-            self.l_show()
+            self.list[j + 1] = target
+            self.show()
 
     def bubble_sort(self):
         """バブルソート
@@ -727,45 +746,21 @@ class List():
             2
         """
         print('bubble sort')
-        n = len(self.mlist)
+        n = len(self.list)
         flag = 1
         counter = 0
         while (flag == 1):
             flag = 0
             for i in range(1, n):
                 j = n - i
-                if self.mlist[j] < self.mlist[j - 1]:
-                    tmp = self.mlist[j]
-                    self.mlist[j] = self.mlist[j - 1]
-                    self.mlist[j - 1] = tmp
+                if self.list[j] < self.list[j - 1]:
+                    tmp = self.list[j]
+                    self.list[j] = self.list[j - 1]
+                    self.list[j - 1] = tmp
                     flag = 1
                     counter += 1
-        self.l_show()
+        self.show()
         print(counter)
-
-    def bubble_sort_trump(self):
-        """バブルソート(トランプ用)
-
-        リストの1番目の要素が文字、2番目の要素が数字である(例: ['D', 3])データが格納された
-        リストの全データについて、バブルソートで数字が昇順になるように並び替える
-
-        Examples:
-            >>> ins = List([['D', 9], ['H', 2], ['C', 4]])
-            >>> ins.bubble_sort_trump()
-            >>> ins.l_show_trump()
-            H2 C4 D9
-        """
-        n = len(self.mlist)
-        flag = 1
-        while (flag == 1):
-            flag = 0
-            for i in range(1, n):
-                j = n - i
-                if self.mlist[j][1] < self.mlist[j - 1][1]:
-                    tmp = self.mlist[j]
-                    self.mlist[j] = self.mlist[j - 1]
-                    self.mlist[j - 1] = tmp
-                    flag = 1
 
     def selection_sort(self):
         """選択ソート
@@ -781,22 +776,54 @@ class List():
             2
         """
         print('selection sort')
-        n = len(self.mlist)
+        n = len(self.list)
         counter = 0
         for i in range(0, n):
             minj = i
             # 最小を探す
             for j in range(i, n):
-                if self.mlist[j] < self.mlist[minj]:
+                if self.list[j] < self.list[minj]:
                     minj = j
             # 入れ替え
             if minj != i:
                 counter += 1
-                tmp = self.mlist[minj]
-                self.mlist[minj] = self.mlist[i]
-                self.mlist[i] = tmp
-        self.l_show()
+                tmp = self.list[minj]
+                self.list[minj] = self.list[i]
+                self.list[i] = tmp
+        self.show()
         print(counter)
+        
+
+class List_for_card(List):
+    """配列クラス(トランプ用)
+    
+    2種類のソート(バブルソート、選択ソート)及びソートの安定性を調べる
+    メソッドを持つ
+    """
+
+    def bubble_sort_trump(self):
+        """バブルソート(トランプ用)
+
+        リストの1番目の要素が文字、2番目の要素が数字である(例: ['D', 3])データが格納された
+        リストの全データについて、バブルソートで数字が昇順になるように並び替える
+
+        Examples:
+            >>> ins = List_for_card([['D', 9], ['H', 2], ['C', 4]])
+            >>> ins.bubble_sort_trump()
+            >>> ins.show_trump()
+            H2 C4 D9
+        """
+        n = len(self.list)
+        flag = 1
+        while (flag == 1):
+            flag = 0
+            for i in range(1, n):
+                j = n - i
+                if self.list[j][1] < self.list[j - 1][1]:
+                    tmp = self.list[j]
+                    self.list[j] = self.list[j - 1]
+                    self.list[j - 1] = tmp
+                    flag = 1
 
     def selection_sort_trump(self):
         """選択ソート(トランプ用)
@@ -805,23 +832,23 @@ class List():
         リストの全データについて、選択ソートで数字が昇順になるように並び替える
 
         Examples:
-            >>> ins = List([['D', 9], ['H', 2], ['C', 4]])
+            >>> ins = List_for_card([['D', 9], ['H', 2], ['C', 4]])
             >>> ins.selection_sort_trump()
-            >>> ins.l_show_trump()
+            >>> ins.show_trump()
             H2 C4 D9
         """
-        n = len(self.mlist)
+        n = len(self.list)
         for i in range(0, n):
             minj = i
             # 最小を探す
             for j in range(i, n):
-                if self.mlist[j][1] < self.mlist[minj][1]:
+                if self.list[j][1] < self.list[minj][1]:
                     minj = j
             # 入れ替え
-            tmp = self.mlist[minj]
-            self.mlist[minj] = self.mlist[i]
-            self.mlist[i] = tmp
-        
+            tmp = self.list[minj]
+            self.list[minj] = self.list[i]
+            self.list[i] = tmp
+
     def stable_sort(self):
         """安定ソート(トランプ用)
 
@@ -831,7 +858,7 @@ class List():
         次に、選択ソートによって整列されたカードを順番に出力し、その出力が安定であるかどうかを出力する。
 
         Examples:
-            >>> ins = List([['H', 4], ['C', 9] ,['S', 4], ['D', 2], ['C', 3]])
+            >>> ins = List_for_card([['H', 4], ['C', 9] ,['S', 4], ['D', 2], ['C', 3]])
             >>> ins.stable_sort()
             stable sort
             D2 C3 H4 S4 C9
@@ -842,27 +869,27 @@ class List():
         print('stable sort')
         # 元のリストを複製
         original = []
-        for i in range(len(self.mlist)):
-            original.append(self.mlist[i])
+        for i in range(len(self.list)):
+            original.append(self.list[i])
         
         # bubble_sort
         self.bubble_sort_trump()
-        self.l_show_trump()
-        if self.checkIsStable(original, self.mlist):
+        self.show_trump()
+        if self.checkIsStable(original, self.list):
             print('Stable')
         else:
             print('Not stable')
 
         # 元のリストを複製
-        self.mlist = original
+        self.list = original
         original = []
-        for i in range(len(self.mlist)):
-            original.append(self.mlist[i])
+        for i in range(len(self.list)):
+            original.append(self.list[i])
 
         # selection_sort
         self.selection_sort_trump()
-        self.l_show_trump()
-        if self.checkIsStable(original, self.mlist):
+        self.show_trump()
+        if self.checkIsStable(original, self.list):
             print('Stable')
         else:
             print('Not stable')
@@ -891,22 +918,21 @@ class List():
                             isStable = False
         return isStable
                             
-    def l_show_trump(self):
+    def show_trump(self):
         """トランプ表示用メソッド
 
         リストの1番目の要素が文字、2番目の要素が数字である(例: ['D', 3])データが格納された
         リストの全データについて、1番目と2番目の要素をつなげて(例: D3)スペースを開けて表示する。
 
         Examples:
-            >>> ins = List([['D', 9], ['H', 2], ['C', 4]])
-            >>> ins.l_show_trump()
+            >>> ins = List_for_card([['D', 9], ['H', 2], ['C', 4]])
+            >>> ins.show_trump()
             D9 H2 C4
         """
-        n = len(self.mlist)
+        n = len(self.list)
         for i in range(n-1):
-            print(self.mlist[i][0] + str(self.mlist[i][1]), end=' ')
-        print(self.mlist[n-1][0] + str(self.mlist[n-1][1]))
-
+            print(self.list[i][0] + str(self.list[i][1]), end=' ')
+        print(self.list[n-1][0] + str(self.list[n-1][1]))
 
 if __name__ == '__main__':
     import doctest
