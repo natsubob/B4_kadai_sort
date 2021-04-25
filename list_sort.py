@@ -4,7 +4,7 @@ class Node():
     双方向連結リストクラスDoublyLinkedList()のノードオブジェクトとして利用する
 
     Attributes:
-        data(int) : ノードのデータ
+        data(free) : ノードのデータ
         prev(obj) : 対象ノードの前ノード
         next(obj) : 対象ノードの次ノード
     """
@@ -19,8 +19,7 @@ class DoublyLinkedList():
     """双方向連結リストクラス
 
     双方向連結リストクラス
-    データの挿入削除及び3種類のソート(バブルソート、選択ソート、挿入ソート)、ソートの安定性を調べる
-    メソッドを持つ
+    データの挿入削除及び3種類のソート(バブルソート、選択ソート、挿入ソート)メソッドを持つ
     """
 
     def __init__(self):
@@ -33,7 +32,7 @@ class DoublyLinkedList():
          連結リストの先頭にキーxを持つ要素を継ぎ足す
 
         Args:
-            x(int): 挿入するデータ
+            x(free): 挿入するデータ
 
         Examples:
             >>> dll = DoublyLinkedList()
@@ -78,7 +77,7 @@ class DoublyLinkedList():
         そのような要素が存在しない場合は何もしない。
 
         Args:
-            x(int): 削除するデータ
+            x(free): 削除するデータ
 
         Examples:
             >>> dll = DoublyLinkedList()
@@ -190,7 +189,7 @@ class DoublyLinkedList():
                     else:
                         print(printing.data, end=' ')
                         printing = printing.next
-        
+
     def swap_linked_nodes(self, node1, node2):
         """連結ノードの入れ替えメソッド
 
@@ -264,7 +263,7 @@ class DoublyLinkedList():
                 node4.next = node2
                 node3.next = node1
                 node2.prev = node4
-                self.head_node = node4                                   
+                self.head_node = node4                          
 
         elif node5 is None:
             node0.next = node4
@@ -286,17 +285,35 @@ class DoublyLinkedList():
             node3.next = node1
             node2.prev = node4
 
-    def insertion_sort(self):
+    def insertion_sort(self, comp_func):
         """挿入ソート
 
-        リストの要素を挿入ソートにより昇順に並び替える
+        リストの要素を挿入ソートにより並び替える
+        並び替えの順序は引数comp_funcにより、
+        ・昇順
+        ・降順
+        ・奇数>偶数かつ奇数内および偶数内では昇順
+        から指定できる。
+
+        Args:
+            comp_func(ラムダ式): リストの並び替えの仕方を指定する関数
+                                ・昇順(comp_func = lambda x, y: x <= y)
+                                ・降順comp_func = lambda x, y: x >= y)
+                                ・奇数>偶数かつ奇数内および偶数内では昇順
+                                  (comp_func = lambda x, y: x <= y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
 
         Examples:
             >>> ins = DoublyLinkedList()
             >>> ins.insert_list_as_dll([2, 1, 7, 6])
-            >>> ins.insertion_sort()
+            >>> ins.insertion_sort(comp_func = lambda x, y: x <= y)
             insertion sort
             1 2 6 7
+            >>> ins.insertion_sort(comp_func = lambda x, y: x >= y)
+            insertion sort
+            7 6 2 1
+            >>> ins.insertion_sort(comp_func = lambda x, y: x <= y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
+            insertion sort
+            1 7 2 6
         """
         print('insertion sort')
         v = self.head_node.next
@@ -309,7 +326,7 @@ class DoublyLinkedList():
             next_ins_point = insert_point
             # 挿入箇所を調べる
             while True:
-                if (insert_point is None) or (insert_point.data <= v.data):
+                if (insert_point is None) or comp_func(insert_point.data, v.data):
                     insert_point = next_ins_point
                     break
                 else:
@@ -324,7 +341,7 @@ class DoublyLinkedList():
                 node0 = insert_point.prev
                 node1 = v.prev
                 node2 = v.next
-                
+
                 # 挿入して先頭に来る場合
                 if insert_point == self.head_node:
                     #末尾ノードが先頭に来る場合
@@ -364,17 +381,35 @@ class DoublyLinkedList():
             v = next_v
         self.show()
         
-    def bubble_sort(self):
+    def bubble_sort(self, comp_func):
         """バブルソート
 
-        リストの要素をバブルソートにより昇順に並び替える
+        リストの要素をバブルソートにより並び替える
+        並び替えの順序は引数comp_funcにより、
+        ・昇順
+        ・降順
+        ・奇数>偶数かつ奇数内および偶数内では昇順
+        から指定できる。
+    
+        Args:
+            comp_func(ラムダ式): リストの並び替えの仕方を指定する関数
+                                ・昇順(comp_func = lambda x, y: x < y)
+                                ・降順comp_func = lambda x, y: x > y)
+                                ・奇数>偶数かつ奇数内および偶数内では昇順
+                                  (comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
 
         Examples:
             >>> ins = DoublyLinkedList()
             >>> ins.insert_list_as_dll([2, 1, 7, 6])
-            >>> ins.bubble_sort()
+            >>> ins.bubble_sort(comp_func = lambda x, y: x < y)
             bubble sort
             1 2 6 7
+            >>> ins.bubble_sort(comp_func = lambda x, y: x > y)
+            bubble sort
+            7 6 2 1
+            >>> ins.bubble_sort(comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
+            bubble sort
+            1 7 2 6
         """
         print('bubble sort')
         flag = 1
@@ -388,7 +423,7 @@ class DoublyLinkedList():
                 if node1 is None:
                     break
 
-                elif node2.data < node1.data:
+                elif comp_func(node2.data, node1.data):
                     node0 = node1.prev
                     self.swap_linked_nodes(node1, node2)
                     flag = 1
@@ -398,18 +433,37 @@ class DoublyLinkedList():
                     node2 = node1
                     node1 = node1.prev
         self.show()
-
-    def selection_sort(self):
+        
+    def selection_sort(self, comp_func):
         """選択ソート
 
-        リストの要素を選択ソートにより昇順に並び替える
+        リストの要素を選択ソートにより並び替える
+        並び替えの順序は引数comp_funcにより、
+        ・昇順
+        ・降順
+        ・奇数>偶数かつ奇数内および偶数内では昇順
+        から指定できる。
+        挿入ソートの各計算ステップでの途中結果を1行ずつ表示する。
+
+        Args:
+            comp_func(ラムダ式): リストの並び替えの仕方を指定する関数
+                                ・昇順(comp_func = lambda x, y: x < y)
+                                ・降順comp_func = lambda x, y: x > y)
+                                ・奇数>偶数かつ奇数内および偶数内では昇順
+                                  (comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
 
         Examples:
             >>> ins = DoublyLinkedList()
             >>> ins.insert_list_as_dll([2, 1, 7, 6])
-            >>> ins.selection_sort()
+            >>> ins.selection_sort(comp_func = lambda x, y: x < y)
             selection sort
             1 2 6 7
+            >>> ins.selection_sort(comp_func = lambda x, y: x > y)
+            selection sort
+            7 6 2 1
+            >>> ins.selection_sort(comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
+            selection sort
+            1 7 2 6
         """
         print('selection sort')
         target = self.head_node
@@ -417,7 +471,7 @@ class DoublyLinkedList():
             minj = target
             j = target
             while True:
-                if j.data < minj.data:
+                if comp_func(j.data, minj.data):
                     minj = j
                 if j == self.tail_node:
                     break
@@ -439,7 +493,7 @@ class DoublyLinkedList():
             if target == self.tail_node:
                 break
         self.show()
-
+              
 
 class DoublyLinkedList_for_card(DoublyLinkedList):
     """双方向連結リストクラス(トランプ用)
@@ -587,7 +641,7 @@ class DoublyLinkedList_for_card(DoublyLinkedList):
             target = next_target
             if target == self.tail_node:
                 break
-          
+
     def stable_sort(self):
         """安定ソート(トランプ用)
 
@@ -635,7 +689,7 @@ class DoublyLinkedList_for_card(DoublyLinkedList):
         if self.checkIsStable_DLL(original):
             print('Stable')
         else:
-            print('Not stable')    
+            print('Not stable')  
 
     def checkIsStable_DLL(self, original):
         """安定性判定メソッド
@@ -679,7 +733,8 @@ class DoublyLinkedList_for_card(DoublyLinkedList):
 
 class List():
     """配列クラス
-    
+
+    トランプ用のリストクラス(1番目の要素が文字、2番目の要素が数字(例: ['D', 3])のリストとしてデータを格納する)
     3種類のソート(バブルソート、選択ソート、挿入ソート)
     メソッドを持つ
     """
@@ -702,15 +757,27 @@ class List():
             print(self.list[i], end=' ')
         print(self.list[n-1])
 
-    def insertion_sort(self):
+    def insertion_sort(self, comp_func):
         """挿入ソート
 
-        リストの要素を挿入ソートにより昇順に並び替える。
+        リストの要素を挿入ソートにより並び替える。
+        並び替えの順序は引数comp_funcにより、
+        ・昇順
+        ・降順
+        ・奇数>偶数かつ奇数内および偶数内では昇順
+        から指定できる。
         挿入ソートの各計算ステップでの途中結果を1行ずつ表示する。
+
+        Args:
+            comp_func(ラムダ式): リストの並び替えの仕方を指定する関数
+                                ・昇順(comp_func = lambda x, y: x < y)
+                                ・降順comp_func = lambda x, y: x > y)
+                                ・奇数>偶数かつ奇数内および偶数内では昇順
+                                  (comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
 
         Examples:
             >>> lst = List([5, 2, 4, 6, 1, 3])
-            >>> lst.insertion_sort()
+            >>> lst.insertion_sort(comp_func = lambda x, y: x < y)
             insertion sort
             5 2 4 6 1 3
             2 5 4 6 1 3
@@ -718,6 +785,22 @@ class List():
             2 4 5 6 1 3
             1 2 4 5 6 3
             1 2 3 4 5 6
+            >>> lst.insertion_sort(comp_func = lambda x, y: x > y)
+            insertion sort
+            1 2 3 4 5 6
+            2 1 3 4 5 6
+            3 2 1 4 5 6
+            4 3 2 1 5 6
+            5 4 3 2 1 6
+            6 5 4 3 2 1
+            >>> lst.insertion_sort(comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
+            insertion sort
+            6 5 4 3 2 1
+            5 6 4 3 2 1
+            5 4 6 3 2 1
+            3 5 4 6 2 1
+            3 5 2 4 6 1
+            1 3 5 2 4 6
         """
         print('insertion sort')
         n = len(self.list)
@@ -725,25 +808,44 @@ class List():
         for i in range(1, n):
             target = self.list[i]
             j = i - 1
-            while (j >= 0) and (self.list[j] > target):
+            while (j >= 0) and (comp_func(target, self.list[j])):
                 # 一つ後ろにずらす
                 self.list[j + 1] = self.list[j]
                 j -= 1
             self.list[j + 1] = target
             self.show()
 
-    def bubble_sort(self):
+    def bubble_sort(self, comp_func):
         """バブルソート
 
-        リストの要素をバブルソートにより昇順に並び替える。
+        リストの要素をバブルソートにより並び替える。
         １行目に整列された数列を出力し、2行目に交換回数を出力する。
+        並び替えの順序は引数comp_funcにより、
+        ・昇順
+        ・降順
+        ・奇数>偶数かつ奇数内および偶数内では昇順
+        から指定できる。
 
+        Args:
+            comp_func(ラムダ式): リストの並び替えの仕方を指定する関数
+                                ・昇順(comp_func = lambda x, y: x < y)
+                                ・降順comp_func = lambda x, y: x > y)
+                                ・奇数>偶数かつ奇数内および偶数内では昇順
+                                  (comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
         Examples:
-            >>> lst = List([5,1,4])
-            >>> lst.bubble_sort()
+            >>> lst = List([5, 2, 4, 6, 1, 3])
+            >>> lst.bubble_sort(comp_func = lambda x, y: x < y)
             bubble sort
-            1 4 5
-            2
+            1 2 3 4 5 6
+            9
+            >>> lst.bubble_sort(comp_func = lambda x, y: x > y)
+            bubble sort
+            6 5 4 3 2 1
+            15
+            >>> lst.bubble_sort(comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
+            bubble sort
+            1 3 5 2 4 6
+            12
         """
         print('bubble sort')
         n = len(self.list)
@@ -753,7 +855,7 @@ class List():
             flag = 0
             for i in range(1, n):
                 j = n - i
-                if self.list[j] < self.list[j - 1]:
+                if comp_func(self.list[j], self.list[j - 1]):
                     tmp = self.list[j]
                     self.list[j] = self.list[j - 1]
                     self.list[j - 1] = tmp
@@ -762,18 +864,39 @@ class List():
         self.show()
         print(counter)
 
-    def selection_sort(self):
+    def selection_sort(self, comp_func):
         """選択ソート
 
-        リストの要素を選択ソートにより昇順に並び替える。
+        リストの要素を選択ソートにより並び替える。
         １行目に整列された数列を出力し、2行目に交換回数を出力する。
+        並び替えの順序は引数comp_funcにより、
+        ・昇順
+        ・降順
+        ・奇数>偶数かつ奇数内および偶数内では昇順
+        から指定できる。
+        挿入ソートの各計算ステップでの途中結果を1行ずつ表示する。
+
+        Args:
+            comp_func(ラムダ式): リストの並び替えの仕方を指定する関数
+                                ・昇順(comp_func = lambda x, y: x < y)
+                                ・降順comp_func = lambda x, y: x > y)
+                                ・奇数>偶数かつ奇数内および偶数内では昇順
+                                  (comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
 
         Examples:
-            >>> lst = List([5,1,4])
-            >>> lst.selection_sort()
+            >>> lst = List([5, 2, 4, 6, 1, 3])
+            >>> lst.selection_sort(comp_func = lambda x, y: x < y)
             selection sort
-            1 4 5
-            2
+            1 2 3 4 5 6
+            3
+            >>> lst.selection_sort(comp_func = lambda x, y: x > y)
+            selection sort
+            6 5 4 3 2 1
+            3
+            >>> lst.selection_sort(comp_func = lambda x, y: x < y if (x+y) % 2 == 0 else (True if x % 2 == 1 else False))
+            selection sort
+            1 3 5 2 4 6
+            4
         """
         print('selection sort')
         n = len(self.list)
@@ -782,7 +905,7 @@ class List():
             minj = i
             # 最小を探す
             for j in range(i, n):
-                if self.list[j] < self.list[minj]:
+                if comp_func(self.list[j], self.list[minj]):
                     minj = j
             # 入れ替え
             if minj != i:
@@ -933,6 +1056,7 @@ class List_for_card(List):
         for i in range(n-1):
             print(self.list[i][0] + str(self.list[i][1]), end=' ')
         print(self.list[n-1][0] + str(self.list[n-1][1]))
+
 
 if __name__ == '__main__':
     import doctest
