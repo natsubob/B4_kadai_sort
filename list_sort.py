@@ -1,3 +1,5 @@
+from abc import ABCMeta, abstractmethod
+
 class Node():
     """ノードクラス
 
@@ -15,12 +17,12 @@ class Node():
         self.next = next
 
 
-class AbstractSort_DLL():
+class AbstractSort_DLL(metaclass=ABCMeta):
     """双方向連結リストクラス
 
     データの挿入削除メソッドを持つ3種類のソート(バブルソート、選択ソート、挿入ソート)の抽象クラスである
     """
-
+    @abstractmethod
     def __init__(self):
         self.head_node = None
         self.tail_node = None
@@ -34,7 +36,7 @@ class AbstractSort_DLL():
             x(free): 挿入するデータ
 
         Examples:
-            >>> dll = AbstractSort_DLL()
+            >>> dll = BubbleSort_DLL()
             >>> dll.insert(3)
             >>> dll.insert(7)
             >>> dll.show()
@@ -60,7 +62,7 @@ class AbstractSort_DLL():
             lst(list): 挿入するデータのリスト
 
         Examples:
-            >>> dll = AbstractSort_DLL()
+            >>> dll = BubbleSort_DLL()
             >>> dll.insert_list_as_dll([1,2,3,4,5])
             >>> dll.show()
             1 2 3 4 5
@@ -79,7 +81,7 @@ class AbstractSort_DLL():
             x(free): 削除するデータ
 
         Examples:
-            >>> dll = AbstractSort_DLL()
+            >>> dll = BubbleSort_DLL()
             >>> dll.insert(3)
             >>> dll.insert(7)
             >>> dll.insert(9)
@@ -118,7 +120,7 @@ class AbstractSort_DLL():
         リストの先頭の要素を削除する。
 
         Examples:
-            >>> dll = AbstractSort_DLL()
+            >>> dll = BubbleSort_DLL()
             >>> dll.insert(3)
             >>> dll.insert(7)
             >>> dll.insert(9)
@@ -142,7 +144,7 @@ class AbstractSort_DLL():
         リストの末尾の要素を削除する。
 
         Examples:
-            >>> dll = AbstractSort_DLL()
+            >>> dll = BubbleSort_DLL()
             >>> dll.insert(3)
             >>> dll.insert(7)
             >>> dll.insert(9)
@@ -166,7 +168,7 @@ class AbstractSort_DLL():
         リストの全データをスペースを開けて表示する
 
         Examples:
-            >>> dll = AbstractSort_DLL()
+            >>> dll = BubbleSort_DLL()
             >>> dll.insert(3)
             >>> dll.insert(7)
             >>> dll.insert(9)
@@ -317,6 +319,10 @@ def get_sort_instance_DLL(algorithm_name):
         print("ERROR: input 'bubble'/'insertion'/'selection'")
 
 class BubbleSort_DLL(AbstractSort_DLL):
+    def __init__(self):
+        self.head_node = None
+        self.tail_node = None
+
     def sort(self, comp_func):
         """バブルソート
 
@@ -371,6 +377,10 @@ class BubbleSort_DLL(AbstractSort_DLL):
         self.show()
 
 class SelectionSort_DLL(AbstractSort_DLL):
+    def __init__(self):
+        self.head_node = None
+        self.tail_node = None
+
     def sort(self, comp_func):
         """選択ソート
 
@@ -432,6 +442,10 @@ class SelectionSort_DLL(AbstractSort_DLL):
         self.show()
 
 class InsertionSort_DLL(AbstractSort_DLL):
+    def __init__(self):
+        self.head_node = None
+        self.tail_node = None
+        
     def sort(self, comp_func):
         """挿入ソート
 
@@ -766,11 +780,12 @@ class DoublyLinkedList_for_card(AbstractSort_DLL):
 
 
 
-class AbstractSort_List:
+class AbstractSort_List(metaclass=ABCMeta):
     """抽象ソートクラス
 
     3種類のソート(バブルソート、選択ソート、挿入ソート)クラスの抽象クラス
     """
+    @abstractmethod
     def sort(self, values, comp_func):
         raise NotImplementedError
 
@@ -781,7 +796,7 @@ class AbstractSort_List:
 
         Examples:
             >>> values = [1,2,3]
-            >>> _c = AbstractSort_List()
+            >>> _c = BubbleSort()
             >>> _c.show(values)
             1 2 3
         """
