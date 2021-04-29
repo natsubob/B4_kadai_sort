@@ -193,7 +193,8 @@ class AbstractSort_DLL(metaclass=ABCMeta):
 
     def sort(self, comp_func):
         raise NotImplementedError
-
+        
+  
     def swap_linked_nodes(self, node1, node2):
         """連結ノードの入れ替えメソッド
 
@@ -205,33 +206,27 @@ class AbstractSort_DLL(metaclass=ABCMeta):
         """
         node0 = node1.prev
         node3 = node2.next
+        
+        node2.prev = node0
+        node1.prev = node2
+        node1.next = node3
+        node2.next = node1
 
         # node2がtailの場合
         if node3 is None:
             node0.next = node2
-            node2.prev = node0
-            node1.prev = node2
-            node1.next = node3
-            node2.next = node1
             self.tail_node = node1
                         
         # node1がheadの場合
         elif node0 is None:
-            node2.prev = node0
-            node1.prev = node2
-            node1.next = node3
             node3.prev = node1
-            node2.next = node1
             self.head_node = node2
 
         else:
-            node0.next = node2
-            node2.prev = node0
-            node1.prev = node2
-            node1.next = node3
             node3.prev = node1
-            node2.next = node1
-        
+            node0.next = node2
+
+
     def swap_nonlinked_nodes(self, node1, node4):
         """非連結ノードの入れ替えメソッド
 
@@ -246,48 +241,38 @@ class AbstractSort_DLL(metaclass=ABCMeta):
         node3 = node4.prev
         node5 = node4.next
 
+        node4.prev = node0
+        node1.prev = node3
+        node1.next = node5
+        node4.next = node2
+        node3.next = node1
+        node2.prev = node4
+
+
         # node1が先頭ノード
         if node0 is None:
             #先頭と末尾を入れ替える場合
             if node5 is None:
-                node4.prev = node0
-                node1.prev = node3
-                node1.next = node5
-                node4.next = node2
-                node3.next = node1
-                node2.prev = node4
                 self.head_node = node4  
                 self.tail_node = node1
 
+            #先頭と末尾以外
             else:
-                node4.prev = node0
-                node1.prev = node3
-                node1.next = node5
                 node5.prev = node1
-                node4.next = node2
-                node3.next = node1
-                node2.prev = node4
                 self.head_node = node4                          
 
+        #先頭以外と末尾
         elif node5 is None:
             node0.next = node4
-            node4.prev = node0
-            node1.prev = node3
-            node1.next = node5
-            node4.next = node2
-            node3.next = node1
-            node2.prev = node4
             self.tail_node = node1
 
+        #先頭以外と末尾以外
         else:
             node0.next = node4
-            node4.prev = node0
-            node1.prev = node3
-            node1.next = node5
             node5.prev = node1
-            node4.next = node2
-            node3.next = node1
-            node2.prev = node4
+
+
+
 
 def get_sort_instance_DLL(algorithm_name):
     """ソートインスタンス指定関数
@@ -401,7 +386,7 @@ class SelectionSort_DLL(AbstractSort_DLL):
 
         Examples:
             >>> ins = SelectionSort_DLL()
-            >>> ins.insert_list_as_dll([2, 1, 7, 6])
+            >>> ins.insert_list_as_dll([2, 7, 1, 6])
             >>> ins.sort(comp_func = lambda x, y: x < y)
             selection sort
             1 2 6 7
@@ -445,7 +430,7 @@ class InsertionSort_DLL(AbstractSort_DLL):
     def __init__(self):
         self.head_node = None
         self.tail_node = None
-        
+
     def sort(self, comp_func):
         """挿入ソート
 
@@ -477,17 +462,17 @@ class InsertionSort_DLL(AbstractSort_DLL):
             1 7 2 6
         """
         print('insertion sort')
-        v = self.head_node.next
+        target = self.head_node.next
         while True:
             insert_flag = 0
-            if v is None:
+            if target is None:
                 break
             
-            insert_point = v.prev
+            insert_point = target.prev
             next_ins_point = insert_point
             # 挿入箇所を調べる
             while True:
-                if (insert_point is None) or comp_func(insert_point.data, v.data):
+                if (insert_point is None) or comp_func(insert_point.data, target.data):
                     insert_point = next_ins_point
                     break
                 else:
@@ -495,52 +480,64 @@ class InsertionSort_DLL(AbstractSort_DLL):
                     next_ins_point = insert_point
                     insert_point = insert_point.prev
 
-            next_v = v.next
+            next_target = target.next
 
-            # 先頭もしくは末尾の場合
             if insert_flag == 1:
-                node0 = insert_point.prev
-                node1 = v.prev
-                node2 = v.next
+                self.insert_node(target, insert_point)
 
-                # 挿入して先頭に来る場合
-                if insert_point == self.head_node:
-                    #末尾ノードが先頭に来る場合
-                    if node2 is None:
-                        v.prev = node0
-                        insert_point.prev = v
-                        v.next = insert_point
-                        node1.next = node2             
-                        self.head_node = v
-                        self.tail_node = node1
-
-                    else:
-                        v.prev = node0
-                        insert_point.prev = v
-                        v.next = insert_point
-                        node1.next = node2
-                        node2.prev = node1               
-                        self.head_node = v
-
-                # 末尾のノードを動かす場合
-                elif node2 is None:
-                    node0.next = v
-                    v.prev = node0
-                    insert_point.prev = v
-                    v.next = insert_point
-                    node1.next = node2
-                    self.tail_node = node1
-
-                else:
-                    node0.next = v
-                    v.prev = node0
-                    insert_point.prev = v
-                    v.next = insert_point
-                    node1.next = node2
-                    node2.prev = node1
-
-            v = next_v
+            target = next_target
         self.show()
+
+    def insert_node(self, target, insert_point):
+        """ノード挿入メソッド
+
+        targetノードをinsert_pointノードの直前に挿入する
+
+        Args:
+            target(obj): 挿入するノード
+            insert_point(obj): 挿入場所を示すノード(このノードの直前に挿入される)
+
+        """
+        node0 = insert_point.prev
+        node1 = target.prev
+        node2 = target.next
+
+        # 挿入して先頭に来る場合
+        if insert_point == self.head_node:
+            
+        #末尾ノードが先頭に来る場合
+            if node2 is None:
+                target.prev = node0
+                insert_point.prev = target
+                target.next = insert_point
+                node1.next = node2             
+                self.head_node = target
+                self.tail_node = node1
+
+            else:
+                target.prev = node0
+                insert_point.prev = target
+                target.next = insert_point
+                node1.next = node2
+                node2.prev = node1               
+                self.head_node = target
+
+        # 末尾のノードを動かす場合
+        elif node2 is None:
+            node0.next = target
+            target.prev = node0
+            insert_point.prev = target
+            target.next = insert_point
+            node1.next = node2
+            self.tail_node = node1
+
+        else:
+            node0.next = target
+            target.prev = node0
+            insert_point.prev = target
+            target.next = insert_point
+            node1.next = node2
+            node2.prev = node1
         
 class DoublyLinkedList_for_card(AbstractSort_DLL):
     """双方向連結リストクラス(トランプ用)
